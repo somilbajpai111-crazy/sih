@@ -646,7 +646,6 @@ function AdminPreview() {
   const data = [12, 25, 8, 18, 30];
   return (
     <section className="container admin" id="admin">
-      <h3>Admin Dashboard (Preview)</h3>
       <p style={{ color: "var(--muted)" }}>
         Anonymous institutional analytics to identify trends and plan
         interventions.
@@ -700,7 +699,7 @@ function Footer() {
             <div
               style={{ color: "var(--muted)", marginTop: 8, fontSize: "14px" }}
             >
-              A mental health support initiative for students of Jammu &
+              A Mental health support initiative for students of Jammu &
               Kashmir.
             </div>
           </div>
