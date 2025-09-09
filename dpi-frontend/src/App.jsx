@@ -372,7 +372,26 @@ function InteractiveChat() {
     setUserInput("");
     setIsLoading(true);
 
-    const botResponse = await api.getBotResponse(userInput);
+    let res = "";
+
+    try {
+      const response = await fetch("https://sih-mental.onrender.com/chatbot", {
+        method: "OPTIONS",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt: userInput }),
+      });
+
+      if (!response.ok) throw new Error("HTTP error " + response.status);
+      const data = await response.json();
+
+      res = data.data;
+    } catch (err) {
+      console.error(err);
+      res = "There was some error";
+    }
+
+    // const botResponse = await api.getBotResponse(userInput);
+    const botResponse = res;
     setMessages([...newMessages, { sender: "bot", text: botResponse }]);
     setIsLoading(false);
   };
