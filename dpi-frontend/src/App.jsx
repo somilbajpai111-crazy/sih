@@ -6,6 +6,7 @@
 // - CONFIRMED: Navbar dropdowns, Feature cards, and all other original components are fully restored.
 
 import React, { useEffect, useState, useRef } from "react";
+import logoSrc from "./assets/logo.png"; 
 
 // --- Mock API service (replace with real Flask endpoints later: e.g. fetch('/api/resources')) ---
 export const api = {
@@ -665,6 +666,7 @@ function AdminPreview() {
   const data = [12, 25, 8, 18, 30];
   return (
     <section className="container admin" id="admin">
+      <h3>Weekly Report</h3>
       <p style={{ color: "var(--muted)" }}>
         Anonymous institutional analytics to identify trends and plan
         interventions.
