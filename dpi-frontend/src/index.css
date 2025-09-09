@@ -71,3 +71,8 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+/* Make dropdown option text readable */
+select option {
+  color: black;
+  background-color: white; /* Ensures background is white */
+}
