@@ -82,3 +82,9 @@ select option {
   color: black;
   background-color: white; /* Ensures background is white */
 }
+.logo-image {
+  width: 34px;
+  height: 34px;
+  border-radius: 6px;
+  object-fit: cover;
+}

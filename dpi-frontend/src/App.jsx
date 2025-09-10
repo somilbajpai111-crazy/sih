@@ -6,7 +6,7 @@
 // - CONFIRMED: Navbar dropdowns, Feature cards, and all other original components are fully restored.
 
 import React, { useEffect, useState, useRef } from "react";
-import logoSrc from "./assets/logo.png"; 
+// import logoSrc from "./assets/logo.png";
 
 // --- Mock API service (replace with real Flask endpoints later: e.g. fetch('/api/resources')) ---
 export const api = {
@@ -278,19 +278,13 @@ function Navbar({ onBookAppointment }) {
           style={{ display: "flex", alignItems: "center", gap: "8px" }}
         >
           <img
-            src={logoSrc}
+            src="/logo.png"
             alt="DigiPsych Logo"
-            className="logo-image"
+            className="logo-image" // This class now handles all the styling
             onError={(e) => {
               e.target.src =
                 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 34 34"><rect width="100%" height="100%" fill="%2320c997"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%23071233" font-size="16" font-weight="bold">DP</text></svg>';
               e.target.style.borderRadius = "6px";
-            }}
-            style={{
-              width: "34px",
-              height: "34px",
-              borderRadius: "6px",
-              objectFit: "cover",
             }}
           />
           <span style={{ fontWeight: "bold", fontSize: "18px" }}>
