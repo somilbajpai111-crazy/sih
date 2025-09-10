@@ -268,29 +268,43 @@ const injectStyles = () => {
 };
 
 function Navbar({ onBookAppointment }) {
-  const logoSrc = "/logo.png";
+  // use Vite's base URL so it works in dev (/logo.png) and in production (/sih/logo.png)
+  const logoSrc = `${import.meta.env.BASE_URL}logo.png`;
 
   return (
     <div className="navbar">
       <div className="container nav-inner">
-        <div
+        <a
+          href="/"
           className="logo"
-          style={{ display: "flex", alignItems: "center", gap: "8px" }}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "8px",
+            textDecoration: "none",
+            color: "inherit", // important: matches site text color
+          }}
         >
           <img
-            src="/logo.png"
+            src={logoSrc}
             alt="DigiPsych Logo"
-            className="logo-image" // This class now handles all the styling
-            onError={(e) => {
-              e.target.src =
-                'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 34 34"><rect width="100%" height="100%" fill="%2320c997"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%23071233" font-size="16" font-weight="bold">DP</text></svg>';
-              e.target.style.borderRadius = "6px";
+            className="logo-image"
+            style={{
+              width: "34px",
+              height: "34px",
+              borderRadius: "6px",
+              objectFit: "cover",
             }}
           />
-          <span style={{ fontWeight: "bold", fontSize: "18px" }}>
+          <span
+            style={{
+              fontWeight: "bold",
+              fontSize: "18px",
+            }}
+          >
             DigiPsych
           </span>
-        </div>
+        </a>
 
         <div className="nav-links" aria-hidden>
           <div className="dropdown">
@@ -331,6 +345,7 @@ function Navbar({ onBookAppointment }) {
     </div>
   );
 }
+
 
 function InteractiveChat() {
   const [messages, setMessages] = useState([
