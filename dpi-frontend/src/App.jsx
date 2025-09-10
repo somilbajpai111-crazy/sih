@@ -352,86 +352,178 @@ const injectStyles = () => {
   font-weight: 600;
   color: #fff;
 }
+  /* --- PASTE THIS ENTIRE BLOCK AT THE END OF YOUR CSS --- */
+
+@media (max-width: 768px) {
+  /* --- 1. Adjust Global Padding --- */
+  .container {
+    /* Reduce side padding on mobile */
+    padding: 24px 20px;
+  }
+
+  .nav-inner {
+    padding: 12px 20px;
+  }
+
+  /* --- 2. Adjust Typography --- */
+  .hero h1 {
+    font-size: 32px; /* Make the main title smaller */
+  }
+
+  h3 {
+    font-size: 24px;
+  }
+
+  /* --- 3. Fix Layouts --- */
+  .features,
+  .resource-grid,
+  .footer-grid {
+    /* Make all grids single-column */
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  /* --- 4. Responsive Navbar --- */
+  .nav-links {
+    display: none; /* Hide the desktop links */
+  }
+
+  .nav-cta-group {
+    /* Optionally hide one button to save space */
+    /* For example, hide the "Book Appointment" outline button */
+  }
+  .nav-cta-group .btn-outline {
+    display: none;
+  }
+
+  /* --- 5. Hero Section Stacking --- */
+  .hero {
+    flex-direction: column;
+    padding-top: 30px;
+    text-align: center;
+  }
+  .hero-left {
+    text-align: center;
+  }
+  .hero p {
+    margin: 0 auto 24px;
+  }
+  .hero .buttons {
+    justify-content: center;
+  }
+  .hero-chat-container {
+    width: 100%;
+    height: 450px;
+  }
+  
+  /* Make hero image smaller on mobile */
+  .hero-left img {
+      margin-left: auto; /* Center the image */
+      margin-right: auto;
+      max-width: 50%;
+  }
+}
   `;
   document.head.appendChild(style);
 };
 
 function Navbar({ onBookAppointment }) {
-  // use Vite's base URL so it works in dev (/logo.png) and in production (/sih/logo.png)
+  // 1. ADD STATE: This state will track if the mobile menu is open or closed.
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  // This line was in your original file, re-added for completeness
   const logoSrc = `${import.meta.env.BASE_URL}logo.png`;
 
+  // 2. WRAP RETURN: The component now returns a fragment (<>) to hold both the navbar and the mobile menu.
   return (
-    <div className="navbar">
-      <div className="container nav-inner">
-        <a
-          href="/"
-          className="logo"
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "8px",
-            textDecoration: "none",
-            color: "inherit", // important: matches site text color
-          }}
-        >
-          <img
-            src={logoSrc}
-            alt="DigiPsych Logo"
-            className="logo-image"
+    <>
+      <div className="navbar">
+        <div className="container nav-inner">
+          {/* --- LOGO (No changes here) --- */}
+          <a
+            href="/"
+            className="logo"
             style={{
-              width: "34px",
-              height: "34px",
-              borderRadius: "6px",
-              objectFit: "cover",
-            }}
-          />
-          <span
-            style={{
-              fontWeight: "bold",
-              fontSize: "18px",
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+              textDecoration: "none",
+              color: "inherit",
             }}
           >
-            DigiPsych
-          </span>
-        </a>
+            <img
+              src={logoSrc}
+              alt="DigiPsych Logo"
+              className="logo-image"
+              style={{
+                width: "34px",
+                height: "34px",
+                borderRadius: "6px",
+                objectFit: "cover",
+              }}
+            />
+            <span style={{ fontWeight: "bold", fontSize: "18px" }}>
+              DigiPsych
+            </span>
+          </a>
 
-        <div className="nav-links" aria-hidden>
-          <div className="dropdown">
-            <button>Home</button>
-            <div className="dropdown-menu">
-              <div style={{ padding: "6px 8px" }}>Overview</div>
-              <div style={{ padding: "6px 8px" }}>Mission</div>
-            </div>
+          {/* --- DESKTOP LINKS (Simplified for consistency) --- */}
+          <div className="nav-links" aria-hidden>
+            <a href="#home">Home</a>
+            <a href="#features">Features</a>
+            <a href="#resources">Resources</a>
+            <a href="#peer">Peer Support</a>
+            <a href="#about">About</a>
+            <a href="#contact">Contact</a>
           </div>
-          <div className="dropdown">
-            <button>Features</button>
-            <div className="dropdown-menu">
-              <div style={{ padding: "6px 8px" }}>AI Chat</div>
-              <div style={{ padding: "6px 8px" }}>Booking</div>
-            </div>
-          </div>
-          <div className="dropdown">
-            <button>Resources</button>
-          </div>
-          <div className="dropdown">
-            <button>Peer Support</button>
-          </div>
-          <div className="dropdown">
-            <button>About</button>
-          </div>
-          <div className="dropdown">
-            <button>Contact</button>
-          </div>
-        </div>
 
-        <div className="nav-cta-group">
-          <button className="btn-outline" onClick={onBookAppointment}>
-            Book Appointment
-          </button>
-          <button className="cta">Get Help</button>
+          {/* --- RIGHT-SIDE BUTTONS --- */}
+          <div className="nav-cta-group">
+            <button className="btn-outline" onClick={onBookAppointment}>
+              Book Appointment
+            </button>
+            <button className="cta">Get Help</button>
+
+            {/* 3. ADD HAMBURGER BUTTON: This button toggles the state and is only visible on mobile (via CSS). */}
+            <button
+              className="hamburger-btn"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              aria-label="Toggle menu"
+            >
+              {isMobileMenuOpen ? (
+                <span>&times;</span> /* Close icon (X) */
+              ) : (
+                <span>&#9776;</span> /* Hamburger icon */
+              )}
+            </button>
+          </div>
         </div>
       </div>
-    </div>
+
+      {/* 4. ADD MOBILE MENU: This entire div only appears when isMobileMenuOpen is true. */}
+      {isMobileMenuOpen && (
+        <div className="mobile-menu">
+          <a href="#home" onClick={() => setIsMobileMenuOpen(false)}>
+            Home
+          </a>
+          <a href="#features" onClick={() => setIsMobileMenuOpen(false)}>
+            Features
+          </a>
+          <a href="#resources" onClick={() => setIsMobileMenuOpen(false)}>
+            Resources
+          </a>
+          <a href="#peer" onClick={() => setIsMobileMenuOpen(false)}>
+            Peer Support
+          </a>
+          <a href="#about" onClick={() => setIsMobileMenuOpen(false)}>
+            About
+          </a>
+          <a href="#contact" onClick={() => setIsMobileMenuOpen(false)}>
+            Contact
+          </a>
+        </div>
+      )}
+    </>
   );
 }
 
