@@ -12,11 +12,48 @@ import React, { useEffect, useState, useRef } from "react";
 export const api = {
   async getResources(query = "") {
     const all = [
-      { id: 1, title: "Anxiety Management", type: "article", lang: "en" },
-      { id: 2, title: "Sleep Guide", type: "audio", lang: "hi" },
-      { id: 3, title: "Meditation Audio", type: "audio", lang: "en" },
-      { id: 4, title: "Coping with Exam Stress", type: "video", lang: "mr" },
-      { id: 5, title: "Mindfulness Practices", type: "article", lang: "en" },
+      {
+        id: 1,
+        title: "10-Minute Guided Meditation",
+        type: "video",
+        lang: "en",
+        youtubeId: "O-6f5wQXSu8", // YouTube video ID
+      },
+      {
+        id: 2,
+        title: "Understanding Depression",
+        type: "video",
+        lang: "en",
+        youtubeId: "z-IR48Mb3W0",
+      },
+      {
+        id: 5,
+        title: "Coping with Exam Stress",
+        type: "video",
+        lang: "en",
+        youtubeId: "-RZ86OB9hw4", // YouTube video ID
+      },
+      {
+        id: 3,
+        title: "Peaceful Forest Stream",
+        type: "audio",
+        lang: "en",
+        youtubeId: "1v8mDF57WYs", // YouTube video ID
+      },
+      {
+        id: 4,
+        title: "Journaling for Clarity",
+        type: "video",
+        lang: "en",
+        youtubeId: "WI-j39vOqmk",
+      },
+      {
+        id: 6,
+        title: "Spiritual Journey",
+        type: "video",
+        lang: "en",
+        youtubeId: "8LQ2wZZicUA",
+      },
     ];
     return new Promise((res) =>
       setTimeout(
@@ -135,7 +172,59 @@ const injectStyles = () => {
     .search-row input, .search-row select{padding:10px 12px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:inherit;font-family:inherit}
     .resource-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
     .resource-card{background:var(--glass);padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.03)}
+/* Paste this block after your other 'Resources' styles */
 
+.resource-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Larger cards */
+  gap: 24px; /* More space */
+}
+
+.resource-card {
+  background: var(--card); /* Use a solid card color for better contrast */
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  overflow: hidden; /* This is key for the rounded corners on media */
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.resource-card:hover {
+  transform: translateY(-5px) scale(1.03);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.resource-card .card-image {
+  width: 100%;
+  height: 150px; /* Give images a fixed height */
+  object-fit: cover; /* Ensure images cover the area without distortion */
+}
+
+.resource-card .card-content {
+  padding: 16px;
+  flex: 1; /* Allows content to fill space if needed */
+}
+
+/* Styles for making the YouTube iframe responsive */
+.video-container {
+  position: relative;
+  padding-bottom: 56.25%; /* 16:9 aspect ratio */
+  height: 0;
+  overflow: hidden;
+  width: 100%;
+}
+
+.video-container iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
     /* Forum */
     .forum{margin-top:36px}
     .thread{background:var(--card);padding:12px;border-radius:10px;margin-bottom:10px}
@@ -345,7 +434,6 @@ function Navbar({ onBookAppointment }) {
     </div>
   );
 }
-
 
 function InteractiveChat() {
   const [messages, setMessages] = useState([
@@ -577,15 +665,18 @@ function Resources() {
   const [q, setQ] = useState("");
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     fetchResults();
   }, []);
+
   const fetchResults = async () => {
     setLoading(true);
     const res = await api.getResources(q);
     setItems(res);
     setLoading(false);
   };
+
   return (
     <section className="container resources" id="resources">
       <h3>Resource Hub</h3>
@@ -599,7 +690,6 @@ function Resources() {
           <option value="">All languages</option>
           <option value="en">English</option>
           <option value="hi">Hindi</option>
-          <option value="mr">Marathi</option>
         </select>
         <button className="cta" onClick={fetchResults}>
           Search
@@ -611,11 +701,36 @@ function Resources() {
         <div className="resource-grid">
           {items.map((r) => (
             <div key={r.id} className="resource-card">
-              <strong>{r.title}</strong>
-              <div
-                style={{ color: "var(--muted)", fontSize: 13, marginTop: 6 }}
-              >
-                {r.type} • {r.lang}
+              {/* Conditionally render video if youtubeId exists */}
+              {r.youtubeId && (
+                <div className="video-container">
+                  <iframe
+                    src={`https://www.youtube.com/embed/${r.youtubeId}`}
+                    title={r.title}
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  ></iframe>
+                </div>
+              )}
+
+              {/* Conditionally render image if imageUrl exists (and it's not a video) */}
+              {r.imageUrl && !r.youtubeId && (
+                <img src={r.imageUrl} alt={r.title} className="card-image" />
+              )}
+
+              {/* The content of the card */}
+              <div className="card-content">
+                <strong>{r.title}</strong>
+                <div
+                  style={{
+                    color: "var(--muted)",
+                    fontSize: 13,
+                    marginTop: 6,
+                  }}
+                >
+                  {r.type} • {r.lang}
+                </div>
               </div>
             </div>
           ))}
