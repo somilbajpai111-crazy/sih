@@ -1,14 +1,5 @@
-// File: App.jsx
-// - AI Chatbot is integrated into the Hero section.
-// - Appointment booking is in the Navbar.
-// - CSS for the Appointment Modal is improved.
-// - Footer includes official J&K helpline numbers.
-// - CONFIRMED: Navbar dropdowns, Feature cards, and all other original components are fully restored.
-
 import React, { useEffect, useState, useRef } from "react";
-// import logoSrc from "./assets/logo.png";
 
-// --- Mock API service (replace with real Flask endpoints later: e.g. fetch('/api/resources')) ---
 export const api = {
   async getResources(query = "") {
     const all = [
@@ -17,7 +8,7 @@ export const api = {
         title: "10-Minute Guided Meditation",
         type: "video",
         lang: "en",
-        youtubeId: "O-6f5wQXSu8", // YouTube video ID
+        youtubeId: "O-6f5wQXSu8",
       },
       {
         id: 2,
@@ -31,14 +22,14 @@ export const api = {
         title: "Coping with Exam Stress",
         type: "video",
         lang: "en",
-        youtubeId: "-RZ86OB9hw4", // YouTube video ID
+        youtubeId: "-RZ86OB9hw4",
       },
       {
         id: 3,
         title: "Peaceful Forest Stream",
         type: "audio",
         lang: "en",
-        youtubeId: "1v8mDF57WYs", // YouTube video ID
+        youtubeId: "1v8mDF57WYs",
       },
       {
         id: 4,
@@ -96,7 +87,6 @@ export const api = {
   },
 };
 
-// --- Inject fonts & CSS so this file is standalone ---
 const injectStyles = () => {
   if (document.getElementById("dpi-styles")) return;
 
@@ -114,7 +104,7 @@ const injectStyles = () => {
       --card:#0f2748;
       --muted:#bcd0ff;
       --accent:#20c997;
-      --glass: rgba(15, 39, 72, 0.5); /* Semi-transparent card color */
+      --glass: rgba(15, 39, 72, 0.5);
     }
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     @keyframes scaleUp { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
@@ -128,7 +118,6 @@ const injectStyles = () => {
     .btn-outline{background:transparent;border:1px solid rgba(255,255,255,0.1);padding:10px 14px;border-radius:8px;color:var(--muted);cursor:pointer;transition:all .2s ease}
     .btn-outline:hover{background:rgba(255,255,255,0.05);border-color:rgba(255,255,255,0.2)}
 
-    /* Navbar */
     .navbar{position:sticky;top:0;z-index:40;background:linear-gradient(180deg, rgba(7,18,51,0.85), rgba(7,18,51,0.6));backdrop-filter:blur(6px);border-bottom:1px solid rgba(255,255,255,0.03)}
     .nav-inner{display:flex;align-items:center;justify-content:space-between;padding: 12px 50px;}
     .logo{display:flex;align-items:center;gap:12px;font-weight:700;font-size:18px}
@@ -140,15 +129,12 @@ const injectStyles = () => {
     .dropdown:hover .dropdown-menu{display:block}
     .nav-cta-group{display:flex;gap:12px;align-items:center;}
 
-
-    /* Hero */
     .hero{display:flex;gap:36px;align-items:center;padding:60px 25; min-height: 80vh;}
     .hero-left{flex:1.2; animation: fadeIn 1s ease-out;}
     .hero h1{font-size:42px;margin:0 0 12px}
     .hero p{color:var(--muted);margin:0 0 18px;max-width:620px}
     .hero .buttons{display:flex;gap:12px}
     
-    /* --- Hero Chat Styles --- */
     .hero-chat-container{flex:1;height:450px;background:var(--card);border:1px solid rgba(255,255,255,0.1);border-radius:12px;box-shadow:0 8px 30px rgba(0,0,0,0.4);display:flex;flex-direction:column;overflow:hidden; animation: scaleUp 0.7s ease-out;}
     .hero-chat-header{padding:12px;background:rgba(0,0,0,0.2);font-weight:bold;text-align:center}
     .hero-chat-messages{flex:1;padding:12px;overflow-y:auto;display:flex;flex-direction:column;gap:10px}
@@ -160,81 +146,74 @@ const injectStyles = () => {
     .hero-chat-input-form input{flex:1;padding:10px 12px;border-radius:8px;border:1px solid rgba(255,255,255,0.1);background:transparent;color:inherit;margin-right:8px;font-family:inherit;font-size:14px}
     .hero-chat-input-form button{background:var(--accent);border:none;color:var(--bg);padding:8px 12px;border-radius:8px;cursor:pointer;font-weight:600}
 
-    /* Features */
     .features{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;margin-top:18px}
     .feature-card{background:var(--card);padding:18px;border-radius:12px;border:1px solid rgba(255,255,255,0.03)}
     .feature-card h4{margin:8px 0 6px}
     .feature-card p{margin:0;color:var(--muted);font-size:14px}
     
-    /* Resources */
     .resources{margin-top:40px}
     .search-row{display:flex;gap:12px;margin-bottom:12px}
     .search-row input, .search-row select{padding:10px 12px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:inherit;font-family:inherit}
     .resource-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
     .resource-card{background:var(--glass);padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.03)}
-/* Paste this block after your other 'Resources' styles */
 
-.resource-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Larger cards */
-  gap: 24px; /* More space */
-}
+    .resource-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+    }
 
-.resource-card {
-  background: var(--card); /* Use a solid card color for better contrast */
-  border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  overflow: hidden; /* This is key for the rounded corners on media */
-  display: flex;
-  flex-direction: column;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-}
+    .resource-card {
+      background: var(--card);
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
 
-.resource-card:hover {
-  transform: translateY(-5px) scale(1.03);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
-  border-color: rgba(255, 255, 255, 0.1);
-}
+    .resource-card:hover {
+      transform: translateY(-5px) scale(1.03);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+      border-color: rgba(255, 255, 255, 0.1);
+    }
 
-.resource-card .card-image {
-  width: 100%;
-  height: 150px; /* Give images a fixed height */
-  object-fit: cover; /* Ensure images cover the area without distortion */
-}
+    .resource-card .card-image {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+    }
 
-.resource-card .card-content {
-  padding: 16px;
-  flex: 1; /* Allows content to fill space if needed */
-}
+    .resource-card .card-content {
+      padding: 16px;
+      flex: 1;
+    }
 
-/* Styles for making the YouTube iframe responsive */
-.video-container {
-  position: relative;
-  padding-bottom: 56.25%; /* 16:9 aspect ratio */
-  height: 0;
-  overflow: hidden;
-  width: 100%;
-}
+    .video-container {
+      position: relative;
+      padding-bottom: 56.25%;
+      height: 0;
+      overflow: hidden;
+      width: 100%;
+    }
 
-.video-container iframe {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border: 0;
-}
-    /* Forum */
+    .video-container iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
     .forum{margin-top:36px}
     .thread{background:var(--card);padding:12px;border-radius:10px;margin-bottom:10px}
 
-    /* Admin preview */
     .admin{margin-top:36px;background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);padding:18px;border-radius:12px}
     .chart-row{display:flex;gap:12px;flex-wrap:wrap}
     .chart{flex:1;min-width:220px;padding:12px;background:var(--card);border-radius:8px}
     
-    /* --- Appointment Modal Styles --- */
     .modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(7,18,51,0.6);backdrop-filter:blur(8px);z-index:100;display:flex;align-items:center;justify-content:center;animation:fadeIn 0.3s ease}
     .modal-content{background:var(--glass);padding:28px;border-radius:16px;width:90%;max-width:520px;position:relative;border:1px solid rgba(255,255,255,0.1);box-shadow: 0 10px 40px rgba(0,0,0,0.5); animation: scaleUp 0.4s ease-out;}
     .modal-close-btn{position:absolute;top:15px;right:15px;background:none;border:none;color:var(--muted);font-size:28px;cursor:pointer;transition: all 0.2s ease;}
@@ -248,7 +227,6 @@ const injectStyles = () => {
     .modal-success-message h4{font-size:22px; margin-bottom:8px;}
     .modal-success-message p{color:var(--muted); margin-top:0;}
     
-    /* Footer & Others */
     .footer-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:18px}
     footer{margin-top:48px;padding:36px 0;color:var(--muted);border-top:1px solid rgba(255,255,255,0.03)}
 
@@ -260,7 +238,6 @@ const injectStyles = () => {
       .hero-chat-container{width:100%; height: 450px;}
       .nav-links{display:none}
     }
-       /* Keyframe Animation for Features */
     @keyframes fadeInUp {
       from {
         opacity: 0;
@@ -272,52 +249,38 @@ const injectStyles = () => {
       }
     }
 
-    // REPLACE THE BLOCK ABOVE WITH THIS NEW CODE:
-
-    /* Apply the animation to each feature card and start them as hidden */
     .feature-card {
       animation: fadeInUp 0.5s ease-out forwards;
       opacity: 0;
-      /* Add a transition for the new hover effect */
       transition: all 0.3s ease;
     }
 
-    /* Stagger the animation delay for each card */
     .feature-card:nth-child(1) { animation-delay: 0.1s; }
     .feature-card:nth-child(2) { animation-delay: 0.2s; }
     .feature-card:nth-child(3) { animation-delay: 0.3s; }
     .feature-card:nth-child(4) { animation-delay: 0.4s; }
     .feature-card:nth-child(5) { animation-delay: 0.5s; }
 
-    /* NEW: Make the ENTIRE card lift and grow on hover */
     .feature-card:hover {
       transform: translateY(-5px) scale(1.03);
       box-shadow: 0 8px 25px rgba(0,0,0,0.3);
     }
 
-    /* Keep the separate icon scaling for a nice layered effect */
     .feature-icon {
       transition: transform 0.3s ease;
     }
 
     .feature-card:hover .feature-icon {
-      transform: scale(1.15); /* Slightly reduced scale to look balanced */
+      transform: scale(1.15);
     }
     
-    /* --- END OF THE CODE TO PASTE --- */
-// --- PASTE THIS ENTIRE BLOCK AT THE END OF YOUR CSS ---
-
-/* --- NEW: Styles for Atmospheric Break --- */
 .atmospheric-break {
-  /* The image is the background */
   background-image: 
-    /* This gradient darkens the image to match your site's theme */
     linear-gradient(rgba(7, 18, 51, 0.7), rgba(7, 18, 51, 0.95)),
-    /* Replace this URL with your chosen high-res photo */
     url('https://images.unsplash.com/photo-1532372576292-a42306f1e311?q=80&w=2070&auto=format&fit=crop');
   
   height: 400px;
-  background-attachment: fixed; /* This creates the cool parallax effect */
+  background-attachment: fixed;
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -332,7 +295,7 @@ const injectStyles = () => {
   text-align: center;
   max-width: 600px;
   padding: 20px;
-  background: rgba(0,0,0,0.2); /* Slight dark backdrop for readability */
+  background: rgba(0,0,0,0.2);
   backdrop-filter: blur(2px);
   border-radius: 8px;
 }
@@ -352,12 +315,8 @@ const injectStyles = () => {
   font-weight: 600;
   color: #fff;
 }
-  /* --- PASTE THIS ENTIRE BLOCK AT THE END OF YOUR CSS --- */
-
 @media (max-width: 768px) {
-  /* --- 1. Adjust Global Padding --- */
   .container {
-    /* Reduce side padding on mobile */
     padding: 24px 20px;
   }
 
@@ -365,38 +324,29 @@ const injectStyles = () => {
     padding: 12px 20px;
   }
 
-  /* --- 2. Adjust Typography --- */
   .hero h1 {
-    font-size: 32px; /* Make the main title smaller */
+    font-size: 32px;
   }
 
   h3 {
     font-size: 24px;
   }
 
-  /* --- 3. Fix Layouts --- */
   .features,
   .resource-grid,
   .footer-grid {
-    /* Make all grids single-column */
     grid-template-columns: 1fr;
     gap: 16px;
   }
 
-  /* --- 4. Responsive Navbar --- */
   .nav-links {
-    display: none; /* Hide the desktop links */
+    display: none;
   }
 
-  .nav-cta-group {
-    /* Optionally hide one button to save space */
-    /* For example, hide the "Book Appointment" outline button */
-  }
   .nav-cta-group .btn-outline {
     display: none;
   }
 
-  /* --- 5. Hero Section Stacking --- */
   .hero {
     flex-direction: column;
     padding-top: 30px;
@@ -416,9 +366,8 @@ const injectStyles = () => {
     height: 450px;
   }
   
-  /* Make hero image smaller on mobile */
   .hero-left img {
-      margin-left: auto; /* Center the image */
+      margin-left: auto;
       margin-right: auto;
       max-width: 50%;
   }
@@ -428,18 +377,14 @@ const injectStyles = () => {
 };
 
 function Navbar({ onBookAppointment }) {
-  // 1. ADD STATE: This state will track if the mobile menu is open or closed.
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  // This line was in your original file, re-added for completeness
   const logoSrc = `${import.meta.env.BASE_URL}logo.png`;
 
-  // 2. WRAP RETURN: The component now returns a fragment (<>) to hold both the navbar and the mobile menu.
   return (
     <>
       <div className="navbar">
         <div className="container nav-inner">
-          {/* --- LOGO (No changes here) --- */}
           <a
             href="/"
             className="logo"
@@ -467,7 +412,6 @@ function Navbar({ onBookAppointment }) {
             </span>
           </a>
 
-          {/* --- DESKTOP LINKS (Simplified for consistency) --- */}
           <div className="nav-links" aria-hidden>
             <a href="#home">Home</a>
             <a href="#features">Features</a>
@@ -477,30 +421,23 @@ function Navbar({ onBookAppointment }) {
             <a href="#contact">Contact</a>
           </div>
 
-          {/* --- RIGHT-SIDE BUTTONS --- */}
           <div className="nav-cta-group">
             <button className="btn-outline" onClick={onBookAppointment}>
               Book Appointment
             </button>
             <button className="cta">Get Help</button>
 
-            {/* 3. ADD HAMBURGER BUTTON: This button toggles the state and is only visible on mobile (via CSS). */}
             <button
               className="hamburger-btn"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               aria-label="Toggle menu"
             >
-              {isMobileMenuOpen ? (
-                <span>&times;</span> /* Close icon (X) */
-              ) : (
-                <span>&#9776;</span> /* Hamburger icon */
-              )}
+              {isMobileMenuOpen ? <span>&times;</span> : <span>&#9776;</span>}
             </button>
           </div>
         </div>
       </div>
 
-      {/* 4. ADD MOBILE MENU: This entire div only appears when isMobileMenuOpen is true. */}
       {isMobileMenuOpen && (
         <div className="mobile-menu">
           <a href="#home" onClick={() => setIsMobileMenuOpen(false)}>
@@ -536,25 +473,21 @@ function InteractiveChat() {
   ]);
   const [userInput, setUserInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  // 1. Create a ref for the message container itself
   const messageContainerRef = useRef(null);
 
-  // 2. Update the scrolling logic
   const scrollToBottom = () => {
     const container = messageContainerRef.current;
     if (container) {
-      // Set the container's scroll position to its total height
       container.scrollTop = container.scrollHeight;
     }
   };
 
   useEffect(() => {
-    // Use a slight delay to ensure the new message has rendered before scrolling
     setTimeout(scrollToBottom, 0);
   }, [messages]);
 
   const handleSend = async (e) => {
-    e.preventDefault(); // This is crucial to stop the form's default page-reloading behavior
+    e.preventDefault();
     if (!userInput.trim()) return;
 
     const newMessages = [...messages, { sender: "user", text: userInput }];
@@ -580,7 +513,6 @@ function InteractiveChat() {
       res = "There was some error";
     }
 
-    // const botResponse = await api.getBotResponse(userInput);
     const botResponse = res;
     setMessages([...newMessages, { sender: "bot", text: botResponse }]);
     setIsLoading(false);
@@ -589,7 +521,6 @@ function InteractiveChat() {
   return (
     <div className="hero-chat-container">
       <div className="hero-chat-header">AI Support Chat</div>
-      {/* 3. Apply the ref to the scrollable message div */}
       <div className="hero-chat-messages" ref={messageContainerRef}>
         {messages.map((msg, index) => (
           <div key={index} className={`message ${msg.sender}`}>
@@ -599,7 +530,6 @@ function InteractiveChat() {
         {isLoading && (
           <div className="message bot loading">Bot is typing...</div>
         )}
-        {/* The empty div at the bottom is no longer needed */}
       </div>
       <form className="hero-chat-input-form" onSubmit={handleSend}>
         <input
@@ -628,10 +558,9 @@ function Hero({ onStart }) {
           style={{
             maxWidth: "34%",
             height: "auto",
-            borderRadius: "140px" /* Soften the corners */,
-            marginBottom: "28px" /* Add space below the image */,
-            boxShadow:
-              "0 10px 30px rgba(0,0,0,0.3)" /* Subtle shadow for depth */,
+            borderRadius: "140px",
+            marginBottom: "28px",
+            boxShadow: "0 10px 30px rgba(0,0,0,0.3)",
             marginLeft: "20%",
           }}
         />
@@ -657,9 +586,7 @@ function Hero({ onStart }) {
     </section>
   );
 }
-// --- NEW: Atmospheric Break Component ---
 function AtmosphericBreak() {
-  // You can change this quote or fetch one from an API
   const quote =
     "The first step towards getting somewhere is to decide you're not going to stay where you are.";
   const author = "J.P. Morgan";
@@ -674,16 +601,11 @@ function AtmosphericBreak() {
   );
 }
 
-// --- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ---
-// THE NEXT FUNCTION (LIKE FEATURECARD) STARTS BELOW
-// REPLACE THE FUNCTION ABOVE WITH THIS NEW ONE:
-
 function FeatureCard({ icon, title, children }) {
   return (
     <div className="feature-card">
       <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
         <div
-          // THIS IS THE ONLY LINE THAT WAS ADDED
           className="feature-icon"
           style={{
             width: 44,
@@ -793,7 +715,6 @@ function Resources() {
         <div className="resource-grid">
           {items.map((r) => (
             <div key={r.id} className="resource-card">
-              {/* Conditionally render video if youtubeId exists */}
               {r.youtubeId && (
                 <div className="video-container">
                   <iframe
@@ -806,12 +727,10 @@ function Resources() {
                 </div>
               )}
 
-              {/* Conditionally render image if imageUrl exists (and it's not a video) */}
               {r.imageUrl && !r.youtubeId && (
                 <img src={r.imageUrl} alt={r.title} className="card-image" />
               )}
 
-              {/* The content of the card */}
               <div className="card-content">
                 <strong>{r.title}</strong>
                 <div
@@ -878,7 +797,6 @@ function PeerForumPreview() {
 }
 
 function AdminPreview() {
-  // Simple mock charts using SVG bars (no external lib)
   const data = [12, 25, 8, 18, 30];
   return (
     <section className="container admin" id="admin">
