@@ -1,5 +1,7 @@
-import React, { useEffect, useState, useRef } from "react";
 
+import React, { useEffect, useState, useRef, Suspense } from "react";
+import "./i18n";
+import { useTranslation } from "react-i18next";
 export const api = {
   async getResources(query = "") {
     const all = [
@@ -40,10 +42,10 @@ export const api = {
       },
       {
         id: 6,
-        title: "Spiritual Journey",
+        title: "Spirit Of Kashmir",
         type: "video",
         lang: "en",
-        youtubeId: "8LQ2wZZicUA",
+        youtubeId: "cXLXn-MV5HQ",
       },
     ];
     return new Promise((res) =>
@@ -231,7 +233,58 @@ const injectStyles = () => {
     
     .footer-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:18px}
     footer{margin-top:48px;padding:36px 0;color:var(--muted);border-top:1px solid rgba(255,255,255,0.03)}
-
+.lang-switch-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+  font-weight: 600;
+  font-size: 14px;
+}
+.lang-switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 26px;
+}
+.lang-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--card);
+  border: 1px solid rgba(255,255,255,0.1);
+  -webkit-transition: .4s;
+  transition: .4s;
+  border-radius: 26px;
+}
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+  border-radius: 50%;
+}
+input:checked + .slider {
+  background-color: var(--accent);
+}
+input:checked + .slider:before {
+  -webkit-transform: translateX(24px);
+  -ms-transform: translateX(24px);
+  transform: translateX(24px);
+}
     @media (max-width:900px){
       .hero{flex-direction:column; padding-top: 30px; text-align:center;}
       .hero-left{text-align: center;}
@@ -240,10 +293,8 @@ const injectStyles = () => {
       .hero-chat-container{width:100%; height: 450px;}
       .nav-links{display:none}
     }
-    /* PASTE THIS NEW CODE IN */
-/* --- START: CORRECTED Feature Card Animation --- */
+   
 
-/* 1. A simpler keyframe that only fades in, avoiding the conflict */
 @keyframes fadeInSimple {
   from {
     opacity: 0;
@@ -253,36 +304,30 @@ const injectStyles = () => {
   }
 }
 
-/* 2. The base style for the card */
 .feature-card {
   background: var(--card);
   padding: 18px;
   border-radius: 12px;
   border: 1px solid rgba(255, 255, 255, 0.03);
   
-  /* Use the new, non-conflicting animation */
   animation: fadeInSimple 0.5s ease-out forwards;
-  opacity: 0; /* Start invisible for the animation */
+  opacity: 0;
 
-  /* This transition now works perfectly for the hover effect! */
   transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Base shadow */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); 
 }
 
-/* 3. Stagger the initial fade-in animation */
 .feature-card:nth-child(1) { animation-delay: 0.1s; }
 .feature-card:nth-child(2) { animation-delay: 0.2s; }
 .feature-card:nth-child(3) { animation-delay: 0.3s; }
 .feature-card:nth-child(4) { animation-delay: 0.4s; }
 .feature-card:nth-child(5) { animation-delay: 0.5s; }
 
-/* 4. The hover effect for the WHOLE BLOCK */
 .feature-card:hover {
-  transform: translateY(-6px) scale(1.04); /* Lift and pop */
-  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4); /* Stronger shadow */
+  transform: translateY(-6px) scale(1.04); 
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4); 
 }
 
-/* 5. The separate hover effect for the icon (this stays the same) */
 .feature-icon {
   transition: transform 0.3s ease;
 }
@@ -291,10 +336,7 @@ const injectStyles = () => {
   transform: scale(1.15);
 }
 
-/* --- END: CORRECTED Feature Card Animation --- */
 
-/* --- END: Corrected Feature Card Hover Effect --- */
-/* --- END: New Feature Card Hover Animation --- */
 .atmospheric-break {
   background-image: 
     linear-gradient(rgba(7, 18, 51, 0.7), rgba(7, 18, 51, 0.95)),
@@ -399,7 +441,11 @@ const injectStyles = () => {
 
 function Navbar({ onBookAppointment }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
+ const { t, i18n } = useTranslation();
+ const handleToggleChange = (e) => {
+   const newLang = e.target.checked ? "ks" : "en";
+   i18n.changeLanguage(newLang);
+ };
   const logoSrc = `${import.meta.env.BASE_URL}logo.png`;
 
   return (
@@ -434,21 +480,33 @@ function Navbar({ onBookAppointment }) {
           </a>
 
           <div className="nav-links" aria-hidden>
-            <a href="#home">Home</a>
-            <a href="#features">Features</a>
-            <a href="#resources">Resources</a>
-            <a href="#peer">Peer Support</a>
-            <a href="#about">About</a>
+            <a href="#home">{t("home")}</a>
+            <a href="#features">{t("features")}</a>
+            <a href="#resources">{t("resources")}</a>
+            <a href="#peer">{t("peerSupport")}</a>
+            {/* <a href="#about">{t("About")}</a> */}
             <a href="#contact" onClick={() => setIsMobileMenuOpen(false)}>
-              Contact
+              {t("contact")}
             </a>{" "}
           </div>
 
           <div className="nav-cta-group">
+            <div className="lang-switch-container">
+              <span>A</span>
+              <label className="lang-switch">
+                <input
+                  type="checkbox"
+                  checked={i18n.language === "ks"}
+                  onChange={handleToggleChange}
+                />
+                <span className="slider"></span>
+              </label>
+              <span> ک</span>
+            </div>
             <button className="btn-outline" onClick={onBookAppointment}>
-              Book Appointment
+              {t("bookAppointment")}
             </button>
-            <button className="cta">Get Help</button>
+            <button className="cta">{t("getHelp")}</button>
 
             <button
               className="hamburger-btn"
@@ -464,22 +522,22 @@ function Navbar({ onBookAppointment }) {
       {isMobileMenuOpen && (
         <div className="mobile-menu">
           <a href="#home" onClick={() => setIsMobileMenuOpen(false)}>
-            Home
+            {t("home")}
           </a>
           <a href="#features" onClick={() => setIsMobileMenuOpen(false)}>
-            Features
+            {t("features")}
           </a>
           <a href="#resources" onClick={() => setIsMobileMenuOpen(false)}>
-            Resources
+            {t("resources")}
           </a>
           <a href="#peer" onClick={() => setIsMobileMenuOpen(false)}>
-            Peer Support
+            {t("peerSupport")}
           </a>
-          <a href="#about" onClick={() => setIsMobileMenuOpen(false)}>
+          {/* <a href="#about" onClick={() => setIsMobileMenuOpen(false)}>
             About
-          </a>
+          </a> */}
           <a href="#contact" onClick={() => setIsMobileMenuOpen(false)}>
-            Contact
+            {t("contact")}
           </a>
         </div>
       )}
@@ -488,10 +546,11 @@ function Navbar({ onBookAppointment }) {
 }
 
 function InteractiveChat() {
+  const { t } = useTranslation();
   const [messages, setMessages] = useState([
     {
       sender: "bot",
-      text: "Hello! I am a friendly bot here to help you. What's on your mind?",
+      text: t("aiChatWelcome"),
     },
   ]);
   const [userInput, setUserInput] = useState("");
@@ -543,7 +602,7 @@ function InteractiveChat() {
 
   return (
     <div className="hero-chat-container">
-      <div className="hero-chat-header">AI Support Chat</div>
+      <div className="hero-chat-header">{t("aiChatHeader")}</div>
       <div className="hero-chat-messages" ref={messageContainerRef}>
         {messages.map((msg, index) => (
           <div key={index} className={`message ${msg.sender}`}>
@@ -551,20 +610,20 @@ function InteractiveChat() {
           </div>
         ))}
         {isLoading && (
-          <div className="message bot loading">Bot is typing...</div>
+          <div className="message bot loading">{t("aiChatTyping")}</div>
         )}
       </div>
       <form className="hero-chat-input-form" onSubmit={handleSend}>
         <input
           type="text"
-          placeholder="Type your message..."
+          placeholder={t("aiChatPlaceholder")}
           value={userInput}
           onChange={(e) => setUserInput(e.target.value)}
           disabled={isLoading}
           aria-label="Chat input"
         />
         <button type="submit" disabled={isLoading}>
-          Send
+          {t("aiChatSend")}
         </button>
       </form>
     </div>
@@ -572,6 +631,7 @@ function InteractiveChat() {
 }
 
 function Hero({ onStart }) {
+  const { t } = useTranslation();
   return (
     <section className="container hero" id="home">
       <div className="hero-left">
@@ -587,22 +647,16 @@ function Hero({ onStart }) {
             marginLeft: "20%",
           }}
         />
-        <h1>Digital Mental Health Support for Students</h1>
-        <p>
-          AI-guided first aid, confidential counselling, peer support, and
-          wellness resources — all in one place.
-        </p>
+        <h1>{t("heroTitle")}</h1>
+        <p>{t("heroSubtitle")}</p>
         <div className="buttons">
           <button className="cta" onClick={onStart}>
-            Start Now
+            {t("startNow")}
           </button>
-          <button className="btn-outline">Learn More</button>
+          <button className="btn-outline">{t("learnMore")}</button>
         </div>
         <div style={{ marginTop: 18 }}>
-          <small style={{ color: "var(--muted)" }}>
-            Tailored for college students with regional language support and
-            offline mapping to on-campus counsellors.
-          </small>
+          <small style={{ color: "var(--muted)" }}>{t("heroFinePrint")}</small>
         </div>
       </div>
       <InteractiveChat />
@@ -651,39 +705,44 @@ function FeatureCard({ icon, title, children }) {
 }
 
 function Features() {
+  const { t } = useTranslation();
   return (
     <section className="container">
-      <h3>Core Features</h3>
+      <h3>{t("coreFeatures")}</h3>
       <div className="features" style={{ marginTop: 12 }}>
         <FeatureCard
           icon={<Emoji label="robot">🤖</Emoji>}
-          title="AI-guided Chatbot"
+          title={t("featureChatbot")}
         >
-          Interactive first-aid chat that suggests coping strategies and refers
-          to professionals when necessary.
+          {t("featureChatbotDesc")}
         </FeatureCard>
+
         <FeatureCard
           icon={<Emoji label="calendar">📅</Emoji>}
-          title="Confidential Booking System"
+          title={t("featureBooking")}
         >
-          Secure appointment booking with campus counsellors and emergency
-          helplines.
+          {t("featureBookingDesc")}
         </FeatureCard>
-        <FeatureCard icon={<Emoji label="book">📚</Emoji>} title="Resource Hub">
-          Multilingual videos, audios, and guides accessible offline for
-          regional students.
+
+        <FeatureCard
+          icon={<Emoji label="book">📚</Emoji>}
+          title={t("featureHub")}
+        >
+          {t("featureHubDesc")}
         </FeatureCard>
+
         <FeatureCard
           icon={<Emoji label="people">👥</Emoji>}
-          title="Peer Support Forum"
+          title={t("featureForum")}
         >
-          Moderated, anonymous peer-to-peer support with trained volunteers.
+          {t("featureForumDesc")}
         </FeatureCard>
+
         <FeatureCard
           icon={<Emoji label="chart">📈</Emoji>}
-          title="Admin Dashboard"
+          title={t("featureAdmin")}
         >
-          Anonymous analytics to help institutions plan targeted interventions.
+          {t("featureAdminDesc")}
         </FeatureCard>
       </div>
     </section>
@@ -699,6 +758,7 @@ function Emoji({ children, label }) {
 }
 
 function Resources() {
+   const { t } = useTranslation();
   const [q, setQ] = useState("");
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -716,24 +776,24 @@ function Resources() {
 
   return (
     <section className="container resources" id="resources">
-      <h3>Resource Hub</h3>
+      <h3>{t("resourceHubTitle")}</h3>
       <div className="search-row">
         <input
-          placeholder="Search resources (e.g., sleep, anxiety)"
+          placeholder={t("resourceSearchPlaceholder")}
           value={q}
           onChange={(e) => setQ(e.target.value)}
         />
         <select aria-label="language">
-          <option value="">All languages</option>
-          <option value="en">English</option>
-          <option value="hi">Hindi</option>
+          <option value="">{t("allLanguages")}</option>
+          <option value="en">{t("english")}</option>
+          <option value="hi">{t("hindi")}</option>
         </select>
         <button className="cta" onClick={fetchResults}>
-          Search
+          {t("search")}
         </button>
       </div>
       {loading ? (
-        <div style={{ padding: 12, color: "var(--muted)" }}>Loading…</div>
+        <div style={{ padding: 12, color: "var(--muted)" }}>{t("loading")}</div>
       ) : (
         <div className="resource-grid">
           {items.map((r) => (
@@ -775,62 +835,41 @@ function Resources() {
 }
 
 function PeerForumPreview() {
+  const { t } = useTranslation();
   const threads = [
-    {
-      id: 1,
-      user: "Anonymous",
-      title: "Coping with exam anxiety",
-      msg: "Looking for quick breathing exercises.",
-    },
-    {
-      id: 2,
-      user: "Volunteer",
-      title: "Need a listening ear",
-      msg: "I can volunteer 2 hours weekly to moderate.",
-    },
+    { id: 1, user: "Anonymous", title: "Coping with exam anxiety", msg: "Looking for quick breathing exercises." },
+    { id: 2, user: "Volunteer", title: "Need a listening ear", msg: "I can volunteer 2 hours weekly to moderate." },
   ];
   return (
     <section className="container forum" id="peer">
-      <h3>Peer Support Forum</h3>
-      <p style={{ color: "var(--muted)" }}>
-        A safe space for moderated, anonymous conversations.
-      </p>
+      <h3>{t('peerForumTitle')}</h3>
+      <p style={{ color: "var(--muted)" }}>{t('peerForumSubtitle')}</p>
       <div style={{ marginTop: 12 }}>
         {threads.map((t) => (
           <div className="thread" key={t.id}>
             <strong>{t.title}</strong>
-            <div style={{ color: "var(--muted)", fontSize: 13, marginTop: 6 }}>
-              {t.msg}
-            </div>
-            <div style={{ marginTop: 8 }}>
-              <small style={{ color: "var(--muted)" }}>
-                Posted by {t.user}
-              </small>
-            </div>
+            <div style={{ color: "var(--muted)", fontSize: 13, marginTop: 6 }}>{t.msg}</div>
+            <div style={{ marginTop: 8 }}><small style={{ color: "var(--muted)" }}>Posted by {t.user}</small></div>
           </div>
         ))}
       </div>
       <div style={{ marginTop: 12 }}>
-        <a href="https://www.reddit.com/r/MentalHealthSupport/" className="cta">
-          Join Community
-        </a>
+        <a href="https://www.reddit.com/r/MentalHealthSupport/" className="cta">{t('joinCommunity')}</a>
       </div>
     </section>
   );
 }
 
 function AdminPreview() {
+  const { t } = useTranslation();
   const data = [12, 25, 8, 18, 30];
   return (
     <section className="container admin" id="admin">
-      <h3>Weekly Report</h3>
-      <p style={{ color: "var(--muted)" }}>
-        Anonymous institutional analytics to identify trends and plan
-        interventions.
-      </p>
+      <h3>{t("adminTitle")}</h3>
+      <p style={{ color: "var(--muted)" }}>{t("adminSubtitle")}</p>
       <div className="chart-row" style={{ marginTop: 12 }}>
         <div className="chart">
-          <strong>Weekly screenings</strong>
+          <strong>{t("adminChart1Title")}</strong>
           <div
             style={{
               height: 90,
@@ -855,7 +894,7 @@ function AdminPreview() {
           </div>
         </div>
         <div className="chart">
-          <strong>Top concerns</strong>
+          <strong>{t("adminChart2Title")}</strong>
           <ul style={{ color: "var(--muted)", marginTop: 12 }}>
             <li>Anxiety — 42%</li>
             <li>Sleep — 26%</li>
@@ -868,6 +907,7 @@ function AdminPreview() {
 }
 
 function Footer() {
+    const { t } = useTranslation();
   return (
     <footer id="contact">
       <div className="container">
@@ -877,29 +917,28 @@ function Footer() {
             <div
               style={{ color: "var(--muted)", marginTop: 8, fontSize: "14px" }}
             >
-              A Mental health support initiative for students of Jammu &
-              Kashmir.
+              {t("footerAbout")}
             </div>
           </div>
           <div>
-            <strong>Quick Links</strong>
+            <strong>{t("footerQuickLinks")}</strong>
             <div
               style={{ color: "var(--muted)", marginTop: 8, fontSize: "14px" }}
             >
-              Resources
+              {t("resources")}
               <br />
               <a
                 href="https://www.reddit.com/r/MentalHealthSupport/"
                 style={{ color: "inherit", textDecoration: "none" }}
               >
-                Peer Support
+                {t("peerSupport")}
               </a>
               <br />
-              Book Appointment
+              {t("bookAppointment")}
             </div>
           </div>
           <div>
-            <strong>Contact</strong>
+            <strong>{t("contact")}</strong>
             <div
               style={{ color: "var(--muted)", marginTop: 8, fontSize: "14px" }}
             >
@@ -1059,20 +1098,22 @@ export default function App() {
   };
 
   return (
-    <div>
-      <Navbar onBookAppointment={() => setIsModalOpen(true)} />
-      <main>
-        <Hero onStart={handleStart} />
-        <Features />
-        <Resources />
-        <PeerForumPreview />
-        <AdminPreview />
-      </main>
-      <Footer />
+    <Suspense fallback="Loading...">
+      <div>
+        <Navbar onBookAppointment={() => setIsModalOpen(true)} />
+        <main>
+          <Hero onStart={handleStart} />
+          <Features />
+          <Resources />
+          <PeerForumPreview />
+          <AdminPreview />
+        </main>
+        <Footer />
 
-      {isModalOpen && (
-        <AppointmentModal onClose={() => setIsModalOpen(false)} />
-      )}
-    </div>
+        {isModalOpen && (
+          <AppointmentModal onClose={() => setIsModalOpen(false)} />
+        )}
+      </div>
+    </Suspense>
   );
 }
