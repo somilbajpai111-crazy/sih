@@ -106,6 +106,8 @@ const injectStyles = () => {
       --accent:#20c997;
       --glass: rgba(15, 39, 72, 0.5);
     }
+      html { scroll-behavior: smooth; }
+
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     @keyframes scaleUp { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
@@ -238,42 +240,61 @@ const injectStyles = () => {
       .hero-chat-container{width:100%; height: 450px;}
       .nav-links{display:none}
     }
-    @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
+    /* PASTE THIS NEW CODE IN */
+/* --- START: CORRECTED Feature Card Animation --- */
 
-    .feature-card {
-      animation: fadeInUp 0.5s ease-out forwards;
-      opacity: 0;
-      transition: all 0.3s ease;
-    }
+/* 1. A simpler keyframe that only fades in, avoiding the conflict */
+@keyframes fadeInSimple {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
 
-    .feature-card:nth-child(1) { animation-delay: 0.1s; }
-    .feature-card:nth-child(2) { animation-delay: 0.2s; }
-    .feature-card:nth-child(3) { animation-delay: 0.3s; }
-    .feature-card:nth-child(4) { animation-delay: 0.4s; }
-    .feature-card:nth-child(5) { animation-delay: 0.5s; }
+/* 2. The base style for the card */
+.feature-card {
+  background: var(--card);
+  padding: 18px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  
+  /* Use the new, non-conflicting animation */
+  animation: fadeInSimple 0.5s ease-out forwards;
+  opacity: 0; /* Start invisible for the animation */
 
-    .feature-card:hover {
-      transform: translateY(-5px) scale(1.03);
-      box-shadow: 0 8px 25px rgba(0,0,0,0.3);
-    }
+  /* This transition now works perfectly for the hover effect! */
+  transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Base shadow */
+}
 
-    .feature-icon {
-      transition: transform 0.3s ease;
-    }
+/* 3. Stagger the initial fade-in animation */
+.feature-card:nth-child(1) { animation-delay: 0.1s; }
+.feature-card:nth-child(2) { animation-delay: 0.2s; }
+.feature-card:nth-child(3) { animation-delay: 0.3s; }
+.feature-card:nth-child(4) { animation-delay: 0.4s; }
+.feature-card:nth-child(5) { animation-delay: 0.5s; }
 
-    .feature-card:hover .feature-icon {
-      transform: scale(1.15);
-    }
-    
+/* 4. The hover effect for the WHOLE BLOCK */
+.feature-card:hover {
+  transform: translateY(-6px) scale(1.04); /* Lift and pop */
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4); /* Stronger shadow */
+}
+
+/* 5. The separate hover effect for the icon (this stays the same) */
+.feature-icon {
+  transition: transform 0.3s ease;
+}
+
+.feature-card:hover .feature-icon {
+  transform: scale(1.15);
+}
+
+/* --- END: CORRECTED Feature Card Animation --- */
+
+/* --- END: Corrected Feature Card Hover Effect --- */
+/* --- END: New Feature Card Hover Animation --- */
 .atmospheric-break {
   background-image: 
     linear-gradient(rgba(7, 18, 51, 0.7), rgba(7, 18, 51, 0.95)),
@@ -386,7 +407,7 @@ function Navbar({ onBookAppointment }) {
       <div className="navbar">
         <div className="container nav-inner">
           <a
-            href="/"
+            href={import.meta.env.BASE_URL}
             className="logo"
             style={{
               display: "flex",
@@ -418,7 +439,9 @@ function Navbar({ onBookAppointment }) {
             <a href="#resources">Resources</a>
             <a href="#peer">Peer Support</a>
             <a href="#about">About</a>
-            <a href="#contact">Contact</a>
+            <a href="#contact" onClick={() => setIsMobileMenuOpen(false)}>
+              Contact
+            </a>{" "}
           </div>
 
           <div className="nav-cta-group">
@@ -846,7 +869,7 @@ function AdminPreview() {
 
 function Footer() {
   return (
-    <footer>
+    <footer id="contact">
       <div className="container">
         <div className="footer-grid">
           <div>
